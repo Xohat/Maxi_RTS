@@ -19,6 +19,8 @@ public class UnitFSMArtillery : UnitFSMBase
     private float alertHitTimer = 1f;
     private float alertHitTimerAux = 0f;
 
+    public GameObject projectilePrefab;
+
     private Vector3 eyePosition = new Vector3(0, 2.5f, 0);
 
     protected override void UpdateIdle()
@@ -28,6 +30,7 @@ public class UnitFSMArtillery : UnitFSMBase
             case ArtilleryState.None:
                 base.UpdateIdle();
                 break;
+
             case ArtilleryState.Alert:
                 {
                     if(alertHitTimerAux <= 0)
@@ -36,15 +39,44 @@ public class UnitFSMArtillery : UnitFSMBase
                         alertHitTimerAux = alertHitTimer;
                     }
                     else
-                    {
+                    {                     
                         alertHitTimerAux -= Time.deltaTime;
                     }
                     break;
                 }
+
             case ArtilleryState.Attacking:
+                FireProjectile(enemiesInVisionSphere[0].gameObject.transform.position);
                 break;
+
             case ArtilleryState.Chasing:
                 break;
+        }
+    }
+    public void FireProjectile(Vector3 targetPosition)
+    {
+        if (enemiesInVisionSphere.Contains(currentEnemy))
+        {
+            transform.LookAt(currentEnemy.transform.position);
+            attackCadenceAux += Time.deltaTime;
+
+            if (attackCadenceAux >= attackCadence)
+            {
+                // Instantiate the projectile
+                GameObject projectileObject = Instantiate(
+                    projectilePrefab,
+                    transform.position,
+                    Quaternion.LookRotation(targetPosition - transform.position)
+                );
+
+                ArtilleryProyectile projectile = projectileObject.GetComponent<ArtilleryProyectile>();
+
+                // Set the reference to the spawner, its team, and the target position
+                projectile.SetData(this, team);
+                projectile.SetTargetPosition(targetPosition);
+
+                attackCadenceAux = 0;
+            }
         }
     }
 
@@ -65,13 +97,19 @@ public class UnitFSMArtillery : UnitFSMBase
                 if (Physics.Raycast(transform.position + eyePosition, dir, out hit, visionSphereRadius))
                 {
                     CTeam enemy = hit.transform.GetComponent<CTeam>();
+                    Vector3 enemyPosition = enemy.transform.position;
 
-                    if (enemy)
-                        Debug.Break();
-                }
-                else
-                {
-                    Debug.Log("Not in view sight");
+                    if (enemy) 
+                    {
+                        // Attack only if we can see the target we are aiming for
+                        if (hit.transform.gameObject == enemiesInVisionSphere[i].gameObject)
+                        {
+                            currentEnemy = enemiesInVisionSphere[i];
+                            currentArtilleryState = ArtilleryState.Attacking;
+                            attackCadenceAux = 0;
+                            return;
+                        }
+                    }
                 }
             }
         }

@@ -1489,6 +1489,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6556407513169032361, guid: 2791b4675b2699a4484d6fa8384ca376, type: 3}
+      propertyPath: projectilePrefab
+      value: 
+      objectReference: {fileID: 7796993290185049822, guid: d453faabeaddade44b15a8af22597ee0, type: 3}
     - target: {fileID: 6556407513169032528, guid: 2791b4675b2699a4484d6fa8384ca376, type: 3}
       propertyPath: m_Name
       value: ArtilleryUnit
