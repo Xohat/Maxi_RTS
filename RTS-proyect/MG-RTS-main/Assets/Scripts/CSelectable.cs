@@ -25,12 +25,6 @@ public class CSelectable : MonoBehaviour
         outlineMaterial.SetFloat("_Outline_Width", 0f);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void SetSelected()
     {
         outlineMaterial.SetFloat("_Outline_Width", 0.08f);

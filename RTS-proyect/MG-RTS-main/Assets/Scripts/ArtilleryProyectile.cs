@@ -14,8 +14,6 @@ public class ArtilleryProyectile : MonoBehaviour
     public float speed = 10f;
 
     // The amount of damage the explosion will cause
-    public float explosionRadius = 5f;
-    // The amount of damage the explosion will cause
     public float explosionDamage = 30f;
 
     void Start()
@@ -71,71 +69,4 @@ public class ArtilleryProyectile : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-
-
-    /*
-    // This method will be called when the object collides with something
-    void OnCollisionEnter(Collision collision)
-    {
-        // Instantiate the explosion effect at the collision point
-        // Instantiate(explosionEffect, collision.contacts[0].point, Quaternion.identity);
-
-        // Debug.Log("Collision check" + collision.contacts[0].point);
-
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Selectable")) 
-        {
-            // Instantiate the explosion effect at the collision point
-            // Instantiate(explosionEffect, collision.contacts[0].point, Quaternion.identity);
-
-            // Check for null collision contacts
-            if (collision.contacts.Length == 0)
-            {
-                Debug.Log("No collision contacts");
-                return;
-            }
-
-            // Deal damage to all objects within the explosion radius
-            Collider[] hitColliders = Physics.OverlapSphere(collision.contacts[0].point, explosionRadius);
-            foreach (Collider hitCollider in hitColliders)
-            {
-                // Check if the object has a CTeam with value 1 component and if so, deal damage
-                CTeam team = hitCollider.GetComponent<CTeam>();
-                CLife life = hitCollider.GetComponent<CLife>();
-
-                // Check for null components
-                if (team == null)
-                {
-                    Debug.Log("CTeam component is null on " + hitCollider.name);
-                }
-                if (life == null)
-                {
-                    Debug.Log("CLife component is null on " + hitCollider.name);
-                }
-                if (Team == null)
-                {
-                    Debug.Log("Team is null");
-                }
-
-                if (team != null && life != null)
-                {
-                    if (Team.teamNumber == 1 && team.teamNumber == 0)
-                    {
-                        life.Damage(explosionDamage);
-                    }
-                    else if (team.teamNumber == 1)
-                    {
-                        life.Damage(explosionDamage);
-                    }
-                }
-            }
-
-            // Mark that we have collided
-            hasCollided = true;
-        }
-
-        // Optionally, destroy the object on landing
-        // Destroy(gameObject);
-    }
-    */
 }
